@@ -7,6 +7,14 @@ for (var global of middleware) {
   router.use("/", global);
 }
 
+// Auth
+router.post("/login", controllers.auth.login);
+router.post("/register", controllers.auth.register);
+
+/*router.get("/logout", controllers.auth.logout);
+router.post("/forgot-password", controllers.auth.forgotPassword);
+router.post("/reset-password", controllers.auth.resetPassword);
+*/
 // User
 router.get("/users", controllers.users.get);
 router.get("/users/:id", controllers.users.getById);

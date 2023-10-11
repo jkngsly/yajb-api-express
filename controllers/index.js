@@ -1,7 +1,9 @@
-const users = require("./users-controller.js");
-const jobs = require("./jobs-controller.js");
+const users = require("./users.js");
+const jobs = require("./jobs.js");
+const auth = require("./auth.js");
 
 module.exports = {
   users: users,
   jobs: jobs,
+  auth: auth,
 };
