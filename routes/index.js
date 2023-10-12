@@ -1,15 +1,22 @@
 const controllers = require("../controllers/index.js");
 const router = require("express").Router();
 const middleware = require("../middleware/index.js");
-
-// Global middleware
-for (var global of middleware) {
-  router.use("/", global);
-}
+const { validationRules, validate } = require("../helpers/validator.js");
 
 // Auth
-router.post("/login", controllers.auth.login);
-router.post("/register", controllers.auth.register);
+router.post(
+  "/login",
+  validationRules.authenticate,
+  validate,
+  controllers.auth.login
+);
+
+router.post(
+  "/register",
+  validationRules.register,
+  validate,
+  controllers.auth.register
+);
 
 /*router.get("/logout", controllers.auth.logout);
 router.post("/forgot-password", controllers.auth.forgotPassword);

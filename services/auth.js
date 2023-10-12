@@ -5,14 +5,22 @@ module.exports = {
   isAuthenticated: (req) => {},
 
   register: async (params) => {
+    console.log(params);
     //TODO: Form validation
     let salt = await bcrypt.genSalt(10);
     let user = {
-      first_name: params.first_name,
-      last_name: params.last_name,
+      first_name: params.firstName,
+      last_name: params.lastName,
       email: params.email,
       password: await bcrypt.hash(params.password, salt),
     };
+
+    if (!params.email || !params.password) {
+      return {
+        success: false,
+        error: "Email and password are required.",
+      };
+    }
 
     return new Promise((resolve, reject) => {
       userService.create(user, (result) => {
