@@ -1,3 +1,3 @@
-const requestLog = require("./request-log.js");
+const requestLog = require("@middleware/request-log");
 
 module.exports = [requestLog];

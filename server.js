@@ -1,15 +1,14 @@
-require("dotenv").config();
+require("module-alias/register");
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const router = require("./routes/index.js");
-var cors = require("cors");
+const cors = require("cors");
+const router = require("@routes");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({

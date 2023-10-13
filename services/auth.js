@@ -1,4 +1,4 @@
-const userService = require("./user");
+const userService = require("@services/user");
 const bcrypt = require("bcryptjs");
 
 module.exports = {

@@ -1,6 +1,6 @@
 module.exports = {
   get: (req, res, next) => {
-    res.json({ msg: "DEUUUGH" });
+    res.json({ msg: "" });
   },
   getById: () => {},
   create: () => {},

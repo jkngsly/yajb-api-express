@@ -51,15 +51,15 @@ const validate = (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  const extractedErrors = [];
+  const validationErrors = [];
   errors.array().map((err) => {
-    extractedErrors.push({ [err.path]: err.msg });
+    validationErrors.push({ [err.path]: err.msg });
   });
 
   return res.json({
     success: false,
     error: "Please correct the invalid entries and try again",
-    validationErrors: extractedErrors,
+    validationErrors: validationErrors,
   });
 };
 

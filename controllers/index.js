@@ -1,6 +1,6 @@
-const users = require("./users.js");
-const jobs = require("./jobs.js");
-const auth = require("./auth.js");
+const users = require("@controllers/users");
+const jobs = require("@controllers/jobs");
+const auth = require("@controllers/auth");
 
 module.exports = {
   users: users,

@@ -1,7 +1,7 @@
-const controllers = require("../controllers/index.js");
+const controllers = require("@controllers");
 const router = require("express").Router();
-const middleware = require("../middleware/index.js");
-const { validationRules, validate } = require("../helpers/validator.js");
+const middleware = require("@middleware");
+const { validationRules, validate } = require("@helpers/validator");
 
 // Auth
 router.post(
