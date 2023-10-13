@@ -5,7 +5,6 @@ module.exports = {
   isAuthenticated: (req) => {},
 
   register: async (params) => {
-    console.log(params);
     //TODO: Form validation
     let salt = await bcrypt.genSalt(10);
     let user = {
@@ -23,15 +22,22 @@ module.exports = {
     }
 
     return new Promise((resolve, reject) => {
-      userService.create(user, (result) => {
+      userService.create(user, (result, validationErrors) => {
         if (result) {
           resolve({
             success: true,
           });
         } else {
+          let error = validationErrors
+            ? // Handled exceptions
+              "Please correct the errors below and try again"
+            : // Unhandled exceptions
+              "Registration failed, please contact support if you continue to experience issues";
+
           reject({
-            error: "Registration failed.",
+            error: error,
             success: false,
+            validationErrors: validationErrors,
           });
         }
       });

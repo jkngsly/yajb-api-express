@@ -1,5 +1,8 @@
 const Sequelize = require("sequelize");
 const bcrypt = require("bcryptjs");
+const {
+  handleSequelizeException,
+} = require("@helpers/sequelize-exception-handler");
 
 const sq = new Sequelize("yajb-node", "postgres", "123456", {
   host: "localhost",
@@ -9,23 +12,27 @@ const sq = new Sequelize("yajb-node", "postgres", "123456", {
 const User = require("../models/user")(sq);
 
 module.exports = {
-  findOne: (params, callback, includePk) => {
+  findOne: async (user, callback, includePk) => {
     let attributes = {};
     if (includePk !== true) {
       attributes.exclude = ["id"];
     }
 
     User.findOne({
-      where: params,
+      where: user,
       attributes: attributes,
     }).then((result) => {
       callback(result);
     });
   },
 
-  create: async (params, callback) => {
-    User.create(params).then((result) => {
-      callback(result);
-    });
+  create: async (user, callback) => {
+    User.create(user)
+      .catch(function (err) {
+        callback(false, handleSequelizeException(err));
+      })
+      .then((result) => {
+        callback(result);
+      });
   },
 };
