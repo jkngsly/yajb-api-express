@@ -21,9 +21,7 @@ module.exports = {
     User.findOne({
       where: user,
       attributes: attributes,
-    }).then((result) => {
-      callback(result);
-    });
+    }).then((user) => callback(user));
   },
 
   create: async (user, callback) => {
@@ -31,8 +29,6 @@ module.exports = {
       .catch(function (err) {
         callback(false, handleSequelizeException(err));
       })
-      .then((result) => {
-        callback(result);
-      });
+      .then((user) => callback(user));
   },
 };
