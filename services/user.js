@@ -1,15 +1,9 @@
-const Sequelize = require("sequelize");
 const bcrypt = require("bcryptjs");
 const {
   handleSequelizeException,
 } = require("@helpers/sequelize-exception-handler");
-
-const sq = new Sequelize("yajb-node", "postgres", "123456", {
-  host: "localhost",
-  dialect: "postgres",
-});
-
-const User = require("../models/user")(sq);
+const db = require("@config/database");
+const User = require("../models/user")(db);
 
 module.exports = {
   findOne: async (user, callback, includePk) => {
