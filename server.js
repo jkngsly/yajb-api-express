@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = require("@routes");
 
+global.constants = require("@config/constants");
+
 const app = express();
 const port = process.env.PORT || 3000;
 

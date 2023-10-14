@@ -1,37 +1,49 @@
 const { body, validationResult } = require("express-validator");
+const constants = require("@config/constants");
 
 let validationRules = {
   email: [
     body("email")
+      .trim()
       .notEmpty()
-      .withMessage("E-mail is required")
+      .withMessage(constants.validation.email.required)
       .isEmail()
-      .withMessage("The e-mail provided is invalid")
+      .withMessage(constants.validation.email.invalid)
       .normalizeEmail(),
   ],
 
   password: [
     body("password")
       .notEmpty()
-      .withMessage("Password is required")
+      .withMessage(constants.validation.password.required)
       .isLength({ min: 8, max: 64 })
-      .withMessage("Password must be at least 8 characters long")
+      .withMessage(constants.validation.password.invalid)
       .escape(),
   ],
+
+  confirmPassword: body("confirmPassword").custom(
+    async (confirmPassword, { req }) => {
+      if (req.body.password !== confirmPassword) {
+        throw new Error(constants.validation.password.match);
+      }
+    }
+  ),
 
   fullName: [
     body("firstName")
       .notEmpty()
-      .withMessage("First name is required")
+      .trim()
+      .withMessage(constants.validation.firstName.required)
       .isLength({ min: 1, max: 30 })
-      .withMessage("First name must be between 1 and 30 characters")
+      .withMessage(constants.validation.firstName.invalid)
       .escape(),
 
     body("lastName")
       .notEmpty()
-      .withMessage("Last name is required")
+      .trim()
+      .withMessage(constants.validation.lastName.required)
       .isLength({ min: 1, max: 30 })
-      .withMessage("Last name must be between 1 and 30 characters")
+      .withMessage(constants.validation.lastName.invalid)
       .escape(),
   ],
 };
@@ -58,7 +70,7 @@ const validate = (req, res, next) => {
 
   return res.json({
     success: false,
-    error: "Please correct the invalid entries and try again",
+    error: constants.validation.error,
     validationErrors: validationErrors,
   });
 };

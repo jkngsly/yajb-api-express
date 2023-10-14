@@ -8,6 +8,7 @@
   },
   "_moduleAliases": {
     "@root": ".",
+    "@config": "config",
     "@controllers": "controllers",
     "@helpers": "helpers",
     "@middleware": "middleware",

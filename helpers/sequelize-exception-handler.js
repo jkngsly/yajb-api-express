@@ -8,8 +8,7 @@ const handleSequelizeException = (err) => {
     if (e.type == types[0] && e.path == "email") {
       errors.push({
         path: "email",
-        error:
-          "The provided e-mail is already registered, please use the forgot password page to reset your login",
+        error: global.constants.validation.email.unique,
       });
     }
   });

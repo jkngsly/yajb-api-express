@@ -1,78 +1,69 @@
 const userService = require("@services/user");
 const bcrypt = require("bcryptjs");
+const constants = require("@config/constants");
 
 module.exports = {
   isAuthenticated: (req) => {},
 
-  register: async (params) => {
-    //TODO: Form validation
-    let salt = await bcrypt.genSalt(10);
-    let user = {
-      first_name: params.firstName,
-      last_name: params.lastName,
-      email: params.email,
-      password: await bcrypt.hash(params.password, salt),
-    };
-
-    if (!params.email || !params.password) {
-      return {
-        success: false,
-        error: "Email and password are required.",
-      };
-    }
-
+  login: async (email, password) => {
     return new Promise((resolve, reject) => {
-      userService.create(user, (result, validationErrors) => {
-        if (result) {
-          resolve({
-            success: true,
-          });
-        } else {
-          let error = validationErrors
-            ? // Handled exceptions
-              "Please correct the errors below and try again"
-            : // Unhandled exceptions
-              "Registration failed, please contact support if you continue to experience issues";
-
-          reject({
-            error: error,
+      userService.findOne(
+        {
+          email: email,
+        },
+        async (user) => {
+          let result = {
             success: false,
-            validationErrors: validationErrors,
-          });
-        }
-      });
+            error: false,
+            validationErrors: [],
+          };
+
+          if (user && (await bcrypt.compare(password, user.password))) {
+            result.success = true;
+            result.user = user;
+            resolve(result);
+          } else {
+            result.error = constants.validation.login.invalid;
+            reject(result);
+          }
+        },
+        true
+      );
     });
   },
 
-  login: async (email, password) => {
-    if (!email || !password) {
-      return {
-        success: false,
-        error: "Email and password are required.",
-      };
-    } else {
-      return new Promise((resolve, reject) => {
-        userService.findOne(
-          {
-            email: email,
-          },
-          async (result) => {
-            if (result && (await bcrypt.compare(password, result.password))) {
-              resolve({
-                user: result,
-                success: true,
-              });
-            } else {
-              reject({
-                error: "Invalid credentials provided.",
-                success: false,
-              });
-            }
-          },
-          true
-        );
+  register: async (newUser) => {
+    let salt = await bcrypt.genSalt(10);
+    let user = {
+      first_name: newUser.firstName,
+      last_name: newUser.lastName,
+      email: newUser.email,
+      password: await bcrypt.hash(newUser.password, salt),
+    };
+
+    return new Promise((resolve, reject) => {
+      userService.create(user, (user, validationErrors) => {
+        let result = {
+          success: false,
+          error: false,
+          validationErrors: [],
+        };
+
+        if (user) {
+          result.success = true;
+          resolve(result);
+        } else {
+          if (validationErrors.length) {
+            result.error = validation.error;
+            result.validationErrors = validationErrors;
+          } else {
+            result.error = constants.validation.registration.unhandled;
+          }
+
+          reject(result);
+        }
       });
-    }
+    });
   },
 
   logout: (req) => {},

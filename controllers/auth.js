@@ -1,4 +1,5 @@
 const authService = require("@services/auth");
+const { respond } = require("@helpers/respond");
 
 module.exports = {
   login: async (req, res) => {
@@ -13,6 +14,7 @@ module.exports = {
   register: async (req, res) => {
     try {
       let result = await authService.register(req.body);
+
       res.json(result);
     } catch (err) {
       res.json(err);
