@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const config = {
   host: "localhost",
-  name: "yabj-node",
+  name: "yajb-node",
   user: "postgres",
   password: "123456",
   dialect: "postgres",

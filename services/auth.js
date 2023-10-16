@@ -1,11 +1,25 @@
 const userService = require("@services/user");
-const bcrypt = require("bcryptjs");
 const constants = require("@config/constants");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   isAuthenticated: (req) => {},
 
+  getAccessToken: (user_id) => {
+    return jwt.sign(
+      {
+        id: user.id,
+      },
+      "sssssharedsecret",
+      {
+        expiresIn: 86400,
+      }
+    );
+  },
+
   login: async (email, password) => {
+    const _this = this;
     return new Promise((resolve, reject) => {
       userService.findOne(
         {
@@ -21,6 +35,15 @@ module.exports = {
           if (user && (await bcrypt.compare(password, user.password))) {
             result.success = true;
             result.user = user;
+            result.accessToken = jwt.sign(
+              {
+                id: user.id,
+              },
+              "sssssharedsecret",
+              {
+                expiresIn: 86400,
+              }
+            );
             resolve(result);
           } else {
             result.error = constants.validation.login.invalid;
