@@ -1,22 +1,12 @@
 const userService = require("@services/user");
-const constants = require("@config/constants");
 const jwt = require("jsonwebtoken");
+const expressJwt = require("express-jwt");
+const jwtConfig = require("@config/jwt");
+const constants = require("@config/constants");
 const bcrypt = require("bcryptjs");
 
 module.exports = {
-  isAuthenticated: (req) => {},
-
-  getAccessToken: (user_id) => {
-    return jwt.sign(
-      {
-        id: user.id,
-      },
-      "sssssharedsecret",
-      {
-        expiresIn: 86400,
-      }
-    );
-  },
+  isAuthenticated: () => expressJwt({ secret: jwtConfig.secret }),
 
   login: async (email, password) => {
     const _this = this;
@@ -37,13 +27,11 @@ module.exports = {
             result.user = user;
             result.accessToken = jwt.sign(
               {
-                id: user.id,
+                username: "asdf",
               },
-              "sssssharedsecret",
-              {
-                expiresIn: 86400,
-              }
+              jwtConfig.secret
             );
+
             resolve(result);
           } else {
             result.error = constants.validation.login.invalid;
